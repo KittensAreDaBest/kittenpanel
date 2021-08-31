@@ -16,10 +16,15 @@
         "enabled": false,
         "key": ""
     },
+    "forcejoin": {
+        "enabled": false,
+        "token": "",
+        "guildid": []
+    },
     "oauth2": {
-        "id": "",
-        "secret": "",
-        "domain": ""
+        "id": "example discord application snowflake",
+        "secret": "example secret",
+        "domain": "https://example.net"
     },
     "ip": {
         "trustheader": false,

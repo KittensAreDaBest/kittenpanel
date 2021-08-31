@@ -3,15 +3,25 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import json
 import uvicorn
-import sys
 import git
+import aiohttp
 from routes import api_admin, api_client, api_oauth, auth, dashboard, default
+from utils import mongodb
 
 with open("config.json", "rb") as file:
     config = json.load(file)
+
 app = FastAPI(title=config['appname'], docs_url="/api/docs", redoc_url="/api/docs")
+app.config = config
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+
+app.database = mongodb.MongoDB(config['database'])
+app.session = aiohttp.ClientSession()
+
+app.add_event_handler("startup", app.database.connect_db)
+app.add_event_handler("shutdown", app.database.close_db)
+app.templates = Jinja2Templates(directory="templates")
 
 routes = [api_admin, api_client, api_oauth, auth, dashboard, default]
 for route in routes:

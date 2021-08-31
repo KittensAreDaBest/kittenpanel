@@ -2,3 +2,5 @@ fastapi
 aiohttp
 gitpython
 aiofiles
+fastapi-sessions
+python-jose[cryptography]

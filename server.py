@@ -1,13 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import json
+from starlette.responses import RedirectResponse
 import uvicorn
 import git
 import aiohttp
-from routes import api_admin, api_client, api_oauth, auth, dashboard, default
+from routes import api_admin, api_client, oauth, dashboard, default
 from utils import mongodb
-
+from dependencies import AuthenticationException
 with open("config.json", "rb") as file:
     config = json.load(file)
 
@@ -23,7 +24,11 @@ app.add_event_handler("startup", app.database.connect_db)
 app.add_event_handler("shutdown", app.database.close_db)
 app.templates = Jinja2Templates(directory="templates")
 
-routes = [api_admin, api_client, api_oauth, auth, dashboard, default]
+@app.exception_handler(AuthenticationException)
+async def authentication_exception_handler(request: Request, exc: AuthenticationException):
+    return RedirectResponse(url="/login", status_code=302)
+
+routes = [api_admin, api_client, oauth, dashboard, default]
 for route in routes:
     app.include_router(route.router)
 

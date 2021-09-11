@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ request.app.config['appname'] }}</title>
+        <link></link>
+        <link href="../static/tailwind.css" rel="stylesheet">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+        {% block head %}
+        {% endblock %}
+        <script>
+            $(document).ready(function(){  
+                var navbar = $('a[href="' + window.location.href.split('#')[0] + '"]');
+                navbar.addClass("text-blue-300")
+                navbar.removeClass("text-gray-500")
+            });
+        </script>
+    </head>
+    <body class="bg-kittenpanel-dark-background font-sans leading-normal tracking-normal">
+        <nav id="header" class="bg-kittenpanel-dark-secondary fixed w-full z-10 top-0 shadow">
+            <div class="w-full container mx-auto flex flex-wrap items-center mt-0 pt-3 pb-3 md:pb-0">
+                <div class="w-1/2 pl-2 md:pl-0">
+                    <a class="text-gray-100 text-base xl:text-xl no-underline hover:no-underline font-bold">{{ request.app.config['appname'] }}</a>
+                </div>
+                <div class="w-1/2 pr-0">
+                    <div class="flex relative float-right">
+                        <div class="relative text-sm text-gray-100">
+                        <button id="userButton" class="flex items-center focus:outline-none mr-3">
+                            <img class="w-8 h-8 rounded-full mr-4" src="https://cdn.discordapp.com/avatars/{{ user['_id'] }}/{{ user['discord']['avatar'] }}.webp" alt="Avatar of User"> 
+                                <div class="flex flex-col">
+                                    <span class="hidden md:inline-block text-gray-100">{{ user['discord']['username'] }}</span>
+                                    <span class="hidden md:inline-block text-gray-400 text-xs text-left">{{ user['resources']['credits'] }} Credits</span>
+                                </div>
+                                <svg class="pl-2 h-2 fill-current text-gray-100" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129"><g><path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"/></g></svg>
+                            </button>
+                            <div id="userMenu" class="bg-gray-900 rounded shadow-md absolute mt-12 top-0 right-0 min-w-full overflow-auto z-30 invisible">
+                                <ul class="list-reset">
+                                    <li><a href="{{ url_for('logout') }}" class="px-4 py-2 block text-gray-100 hover:bg-gray-800 no-underline hover:no-underline">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="block lg:hidden pr-4">
+                            <button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-100 hover:border-teal-500 appearance-none focus:outline-none">
+                                <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 secondary-dark z-20" id="nav-content">
+                    <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('dashboard_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-desktop mr-3"></i><span class="pb-1 md:pb-0 text-sm">Your Servers</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="/servers" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="far fa-plus-square mr-3"></i><span class="pb-1 md:pb-0 text-sm">Create Server</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="/shop" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-store mr-3"></i><span class="pb-1 md:pb-0 text-sm">Resource Shop</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="/earn" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-coins mr-3"></i><span class="pb-1 md:pb-0 text-sm">Earn Coins</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ request.app.config['pterodactyl']['domain'] }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-external-link-alt mr-3"></i><span class="pb-1 md:pb-0 text-sm">Panel</span>
+                            </a>
+                        </li>
+                        {% if user['pterodactyl']['admin'] == True %}
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="/admin" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-users-cog mr-3"></i><span class="pb-1 md:pb-0 text-sm">Admin Panel</span>
+                            </a>
+                        </li>
+                        {% endif %} 
+                    </ul>  
+                </div>
+            </div>
+        </nav>
+        <div class="container w-full mx-auto pt-20">
+            <div class="w-full px-4 md:px-0 md:mt-8 mb-16 leading-normal">    
+                {% block main %}
+                {% endblock %}                    
+            </div>
+        </div> 
+    </body>
+    <script type="text/javascript" src="/static/main.js"></script>
+</html>

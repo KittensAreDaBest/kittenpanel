@@ -37,14 +37,15 @@ module.exports = {
       indigo: colors.indigo,
       purple: colors.violet,
       pink: colors.pink,
-      catto: {
-        10: '#131E2D',
-        11: '#1C293A', 
-        100: '#1A2035',
-        200: '#1F283E', 
-        300: '#6861CE',
-        302: '#D295BF',
-        400: '#222E50',
+      kittenpanel: {
+        dark: {
+          background: '#121212',
+          secondary: '#1F1F1F',
+        },
+        light: {
+          background: '#FFFFFF',
+          secondary: '#6200EE',
+        }
       },
       midnight: {
         maastricht: {

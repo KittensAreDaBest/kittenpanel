@@ -1,6 +1,7 @@
 {
     "appname": "KittenPanel",
     "mainsite": "http://example.com",
+    "version": "0.0.1",
     "webserver": {
         "host": "0.0.0.0",
         "port": 5000,
@@ -11,7 +12,10 @@
         "domain": "",
         "key": ""
     },
-    "database": "mongodb://",
+    "database": {
+        "host": "mongodb://",
+        "database": "kittenpanel"
+    },
     "external_api": {
         "enabled": false,
         "key": ""

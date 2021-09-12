@@ -6,7 +6,7 @@ KittenPanel is a client panel that allows users to split resoures throughout mut
 # Features
 | Feature                                   | Completed? |
 |-------------------------------------------|------------|
-| Login / Registering                       |❌         |
+| Login / Registering                       |✔️         |
 | Discord oAuth Login                       |✔️         |
 | Resource Shop                             |✔️         |
 | Crypto Miner for Coins                    |❌         |

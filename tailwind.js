@@ -47,25 +47,6 @@ module.exports = {
           secondary: '#6200EE',
         }
       },
-      midnight: {
-        maastricht: {
-          100: '#01162E',
-          200: '#001D37',
-        },
-        oxford: {
-          100: '#002746',
-        },
-        prussian: {
-          100: '#013155',
-        },
-        darkmidnight: {
-          100: '#003A63'
-        },
-        ateneo: {
-          100: '#01426D',
-        },
-      },
-
     },
     spacing: {
       px: '1px',

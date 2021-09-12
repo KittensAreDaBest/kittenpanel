@@ -1,0 +1,138 @@
+{% extends "extends/base.html"%}
+{% block head %}
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2">
+
+    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+        <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
+            <div class="p-3 mr-4 rounded-full text-green-100 bg-green-500">
+                <!-- heroicons icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-400">CPU</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['cpu'] }}% / 100%</p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
+            <div class="p-3 mr-4 rounded-full text-green-100 bg-purple-500">
+                <!-- fontawesome icon -->
+                <svg aria-hidden="true" class="w-6 h-6" focusable="false" data-prefix="fas" data-icon="memory" class="svg-inline--fa fa-memory fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                    <path fill="currentColor" d="M640 130.94V96c0-17.67-14.33-32-32-32H32C14.33 64 0 78.33 0 96v34.94c18.6 6.61 32 24.19 32 45.06s-13.4 38.45-32 45.06V320h640v-98.94c-18.6-6.61-32-24.19-32-45.06s13.4-38.45 32-45.06zM224 256h-64V128h64v128zm128 0h-64V128h64v128zm128 0h-64V128h64v128zM0 448h64v-26.67c0-8.84 7.16-16 16-16s16 7.16 16 16V448h128v-26.67c0-8.84 7.16-16 16-16s16 7.16 16 16V448h128v-26.67c0-8.84 7.16-16 16-16s16 7.16 16 16V448h128v-26.67c0-8.84 7.16-16 16-16s16 7.16 16 16V448h64v-96H0v96z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-400">RAM</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['ram'] }}MB / 1024MB</p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
+            <div class="p-3 mr-4 rounded-full text-green-100 bg-pink-500">
+                <!-- fontawesome icon -->
+                <svg aria-hidden="true" class="h-6 w-6" focusable="false" data-prefix="far" data-icon="hdd" class="svg-inline--fa fa-hdd fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                    <path fill="currentColor" d="M567.403 235.642L462.323 84.589A48 48 0 0 0 422.919 64H153.081a48 48 0 0 0-39.404 20.589L8.597 235.642A48.001 48.001 0 0 0 0 263.054V400c0 26.51 21.49 48 48 48h480c26.51 0 48-21.49 48-48V263.054c0-9.801-3-19.366-8.597-27.412zM153.081 112h269.838l77.913 112H75.168l77.913-112zM528 400H48V272h480v128zm-32-64c0 17.673-14.327 32-32 32s-32-14.327-32-32 14.327-32 32-32 32 14.327 32 32zm-96 0c0 17.673-14.327 32-32 32s-32-14.327-32-32 14.327-32 32-32 32 14.327 32 32z"></path>
+                </svg>        
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-400">Disk</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['disk'] }}MB / 2048MB </p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
+            <div class="p-3 mr-4 rounded-full text-green-100 bg-blue-500">
+                <!-- fontawesome icon -->
+                <svg aria-hidden="true" class="w-6 h-6" focusable="false" data-prefix="fas" data-icon="archive" class="svg-inline--fa fa-archive fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path fill="currentColor" d="M32 448c0 17.7 14.3 32 32 32h384c17.7 0 32-14.3 32-32V160H32v288zm160-212c0-6.6 5.4-12 12-12h104c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-8zM480 32H32C14.3 32 0 46.3 0 64v48c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V64c0-17.7-14.3-32-32-32z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-400">Backups</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['backups'] }} / 1</p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
+            <div class="p-3 mr-4 rounded-full text-green-100 bg-yellow-500">
+                <!-- fontawesome icon -->
+                <svg aria-hidden="true" class="w-6 h-6" focusable="false" data-prefix="fas" data-icon="network-wired" class="svg-inline--fa fa-network-wired fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                    <path fill="currentColor" d="M640 264v-16c0-8.84-7.16-16-16-16H344v-40h72c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32H224c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h72v40H16c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h104v40H64c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32h-56v-40h304v40h-56c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32h-56v-40h104c8.84 0 16-7.16 16-16zM256 128V64h128v64H256zm-64 320H96v-64h96v64zm352 0h-96v-64h96v64z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-400">Extra Ports</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['ports'] }} / 1</p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
+            <div class="p-3 mr-4 rounded-full text-green-100 bg-red-500">
+                <!-- heroicons icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-400">Databases</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['databases'] }} / 1 </p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
+            <div class="p-3 mr-4 rounded-full text-green-100 bg-purple-500">
+                <!-- heroicons icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-400">Servers</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['servers'] }} / 1</p>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-xl text-white pb-2 flex items-center">
+        Editing Server 
+    </p>
+    <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="name">Server Name</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="name" type="text" value="{{ server['name'] }}">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="name">Server Type</label>
+            <select class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" id="userselect">
+                <option id="1">PaperMC</option>
+            </select>
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="email">CPU ( % )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" value="{{ server['limits']['cpu'] }}">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="email">Ram ( MB )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ram" type="number" value="{{ server['limits']['memory'] }}">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="email">Disk ( MB )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="disk" type="number" value="{{ server['limits']['disk'] }}">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="email">Backups</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="backups" type="number" value="{{ server['feature_limits']['backups'] }}">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="email">Extra Ports</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ports" type="number" value="{{ server['feature_limits']['allocations'] - 1 if server['feature_limits']['allocations'] != 0 else server['feature_limits']['allocations'] }}">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" for="email">Databases</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="databases" type="number" value="{{ server['feature_limits']['databases'] }}">
+        </div>
+        <div class="mt-6">
+            <button onclick="createServer()" id="updatepassword" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Edit Server</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

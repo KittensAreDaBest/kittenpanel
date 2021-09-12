@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.param_functions import Depends
 from starlette.requests import Request
+from starlette.responses import RedirectResponse
 from dependencies import get_user
 import math
 router = APIRouter()
@@ -20,6 +21,33 @@ def convert_size(size_bytes):
    s = round(size_bytes / p, 2)
    return "%s %s" % (s, size_name[i])
 
+def resourcesUsed(servers):
+    cpu = 0
+    ram = 0
+    disk = 0 
+    backups = 0 
+    ports = 0
+    databases = 0
+    slots = 0
+    for server in servers:
+        cpu += server['attributes']['limits']['cpu']
+        ram += server['attributes']['limits']['memory']
+        disk += server['attributes']['limits']['disk']
+        backups += server['attributes']['feature_limits']['backups']
+        if server['attributes']['feature_limits']['allocations'] != 0:
+            ports += server['attributes']['feature_limits']['allocations'] - 1
+        databases += server['attributes']['feature_limits']['databases']
+        slots += 1
+    return {
+        'cpu': cpu,
+        'ram': ram,
+        'disk': disk,
+        'backups': backups,
+        'ports': ports,
+        'databases': databases,
+        'servers': slots
+    }
+
 @router.get("/")
 async def dashboard_get(request: Request, user = Depends(get_user)):
     ptero = pterodactyl(request.app.config)
@@ -31,3 +59,33 @@ async def dashboard_get(request: Request, user = Depends(get_user)):
         server['attributes']['limits']['disk'] = convert_size(server['attributes']['limits']['disk']) if server['attributes']['limits']['disk'] != 0 else "Unlimited"
         server['attributes']['limits']['cpu'] = server['attributes']['limits']['cpu'] if server['attributes']['limits']['cpu'] != 0 else "Unlimited"  
     return request.app.templates.TemplateResponse("dashboard/dash.html", {"request": request, "user": user, "servers": servers, "panel": ptero})
+
+@router.get("/shop")
+async def shop_get(request: Request, user = Depends(get_user)):
+    return request.app.templates.TemplateResponse("dashboard/shop.html", {"request": request, "user": user})
+
+@router.get("/server/create")
+async def create_get(request: Request, user = Depends(get_user)):
+    ptero = pterodactyl(request.app.config)
+    async with request.app.session.get(f"{ptero}api/application/users/{user['pterodactyl']['id']}?include=servers", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
+        req = await response.json()
+        servers = req['attributes']['relationships']['servers']['data']
+        resources = resourcesUsed(servers)
+    return request.app.templates.TemplateResponse("dashboard/create.html", {"request": request, "user": user, "resourcesUsed": resources})
+
+@router.get("/server/edit/{server_id}")
+async def create_get(request: Request, server_id, user = Depends(get_user)):
+    ptero = pterodactyl(request.app.config)
+    async with request.app.session.get(f"{ptero}api/application/users/{user['pterodactyl']['id']}?include=servers", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
+        req = await response.json()
+        servers = req['attributes']['relationships']['servers']['data']
+        resources = resourcesUsed(servers)
+
+    editServer = None
+    for server in servers:
+        if server['attributes']['identifier'] == server_id:
+            editServer = server['attributes']
+    if not editServer:
+        return RedirectResponse(url="/", status_code=302)
+    print(editServer)
+    return request.app.templates.TemplateResponse("dashboard/edit.html", {"request": request, "user": user, "server": editServer, "resourcesUsed": resources})

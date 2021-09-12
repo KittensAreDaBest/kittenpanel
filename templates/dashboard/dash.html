@@ -5,6 +5,7 @@
 {% block main %}
 
 <div class="bg-white flex flex-col rounded">
+    {% if servers|length != 0 %}
     <table class="min-w-full bg-white">
         <thead class="bg-gray-800 text-white">
             <tr>
@@ -13,7 +14,7 @@
                 <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Disk</th>
                 <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Cpu</th>
                 <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Databases</th>
-                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Ports</th>
+                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Extra Ports</th>
                 <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Backups</th>
                 <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
             </tr>
@@ -26,7 +27,7 @@
                 <td class="text-left py-3 px-4">{{ server['attributes']['limits']['disk'] }}</td>
                 <td class="text-left py-3 px-4">{{ server['attributes']['limits']['cpu'] }}</td>
                 <td class="text-left py-3 px-4">{{ server['attributes']['feature_limits']['databases'] }}</td>
-                <td class="text-left py-3 px-4">{{ server['attributes']['feature_limits']['allocations'] }}</td>
+                <td class="text-left py-3 px-4">{{ server['attributes']['feature_limits']['allocations'] - 1 if server['attributes']['feature_limits']['allocations'] != 0 else server['attributes']['feature_limits']['allocations'] }}</td>
                 <td class="text-left py-3 px-4">{{ server['attributes']['feature_limits']['backups'] }}</td>
                 <td class="w-1/4 text-left py-3 px-4">
                     <button class="bg-red-600 p-2 rounded w-10 h-10 m-1"><i class="fas fa-trash text-white"></i></button>
@@ -41,7 +42,10 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <div class="flex flex-col">
+        <span class="text-center text-gray-400">You do not have any servers.</span>
+    </div>
+    {% endif %}
 </div>
-
-
 {% endblock %}

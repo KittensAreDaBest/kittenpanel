@@ -1,6 +1,6 @@
 fastapi
 aiohttp
-gitpython
+dnspython
+motor
 aiofiles
-fastapi-sessions
-python-jose[cryptography]
+uvicorn

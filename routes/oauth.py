@@ -12,8 +12,9 @@ async def logout(request: Request, session = Depends(get_user_session)):
     conf = request.app.config
     await request.app.session.post("https://discord.com/api/oauth2/token/revoke", headers={"Content-Type": "application/x-www-form-urlencoded"}, data={"client_id": conf['oauth2']['id'], "client_secret": conf['oauth2']['secret'], "token": session['accesstoken']})
     db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
 
-    await db.kittenpanel.sessions.delete_one({"_id": session['_id']})
+    await db.sessions.delete_one({"_id": session['_id']})
     response = RedirectResponse(conf['mainsite'], status_code=302)
     response.delete_cookie(key="kittenpanel_sessionid")
     return response
@@ -64,7 +65,8 @@ async def callback(request: Request, code: str):
             return JSONResponse({"error": "Discord Email not verified"}, status_code=403)
     session = str(uuid.uuid4())
     db = await request.app.database.get_db_client()
-    await db.kittenpanel.sessions.insert_one({"_id": session, "user_id": rr["id"], "accesstoken": resp["access_token"], "expires": time.time() + 518400})
+    db = db[request.app.config['database']['database']]
+    await db.sessions.insert_one({"_id": session, "user_id": rr["id"], "accesstoken": resp["access_token"], "expires": time.time() + 518400})
     if conf['pterodactyl']['domain'].endswith('/'):
         pterodactyl = f"{conf['pterodactyl']['domain']}"
     else:

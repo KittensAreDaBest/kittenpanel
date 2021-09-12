@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ request.app.config['appname'] }}</title>
         <link></link>
-        <link href="../static/tailwind.css" rel="stylesheet">
+        <link href="/static/tailwind.css" rel="stylesheet">
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -59,12 +59,12 @@
                             </a>
                         </li>
                         <li class="mr-6 my-2 md:my-0">
-                            <a href="/servers" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                            <a href="{{ url_for('create_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
                                 <i class="far fa-plus-square mr-3"></i><span class="pb-1 md:pb-0 text-sm">Create Server</span>
                             </a>
                         </li>
                         <li class="mr-6 my-2 md:my-0">
-                            <a href="/shop" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                            <a href="{{ url_for('shop_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
                                 <i class="fas fa-store mr-3"></i><span class="pb-1 md:pb-0 text-sm">Resource Shop</span>
                             </a>
                         </li>

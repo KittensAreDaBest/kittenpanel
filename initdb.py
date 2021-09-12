@@ -19,3 +19,4 @@ async def main():
             "database": 0
         }
     })
+asyncio.run(main())

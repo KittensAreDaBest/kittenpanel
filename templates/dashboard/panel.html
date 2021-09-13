@@ -1,0 +1,29 @@
+{% extends "extends/base.html"%}
+{% block head %}
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2">    
+    <div class="flex flex-col items-center">
+        <div class="p-5 mt-24 w-2/3 bg-kittenpanel-dark-secondary rounded shadow-xl">
+            <div class="mt-2">
+                <label class="block text-3xl text-white" >Panel Login</label>
+                <label class="block text-xl text-white" >Get your panel password by resetting it in the panel's login page</label>
+            </div>
+            <div class="mt-2">
+                <label class="block text-white" >Username</label>
+                <input class="mt-1 w-full text-white bg-gray-700 rounded-lg p-2" type="text" placeholder="Username" value="{{ user['pterodactyl']['username'] }}" readonly="readonly">
+            </div>
+            <div class="mt-2">
+                <label class="block text-white" >Email</label>
+                <input class="mt-1 w-full text-white bg-gray-700 rounded-lg p-2" type="email" placeholder="email" value="{{ user['pterodactyl']['email'] }}" readonly="readonly">
+            </div>
+            <div class="mt-6">
+                <a href="{{ request.app.config['pterodactyl']['domain'] }}">
+                    <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Login to Panel.</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

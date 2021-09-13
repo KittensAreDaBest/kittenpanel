@@ -71,13 +71,13 @@ async def callback(request: Request, code: str):
         pterodactyl = f"{conf['pterodactyl']['domain']}"
     else:
         pterodactyl = f"{conf['pterodactyl']['domain']}/"
-    if not await db.kittenpanel.users.find_one({"_id": rr["id"]}):
+    if not await db.users.find_one({"_id": rr["id"]}):
         async with request.app.session.get(pterodactyl + "api/application/users?include=servers&filter[email]=" + quote(rr['email']), headers={"Authorization": "Bearer " + conf['pterodactyl']['key']}) as resp:
             data = await resp.json()
             if data['meta']['pagination']['total'] == 0:
                 async with request.app.session.post(pterodactyl + "api/application/users", json={"username": str(rr['id']), "email": rr['email'], "first_name": rr['username'], "last_name": '#' + rr['discriminator']}) as resp:
                     dd = await resp.json()
-                    await db.kittenpanel.users.insert_one({
+                    await db.users.insert_one({
                         "_id": rr['id'], 
                         "disabled": False,
                         "plan": 1,
@@ -109,7 +109,7 @@ async def callback(request: Request, code: str):
                 user = data['data'][0]['attributes']
                 if user['email'] != rr['email']:
                     raise Exception("Well this shouldnt be happening since its being filtered. Raising exception to prevent any security problems")
-                await db.kittenpanel.users.insert_one({
+                await db.users.insert_one({
                     "_id": rr['id'], 
                     "disabled": False,
                     "plan": 1,
@@ -145,7 +145,7 @@ async def callback(request: Request, code: str):
             "avatar": rr["avatar"],
             "email": rr["email"]
         }
-        user = await db.kittenpanel.users.find_one({"_id": rr["id"]})
+        user = await db.users.find_one({"_id": rr["id"]})
         async with request.app.session.get(pterodactyl + "api/application/users/" + str(user['pterodactyl']['id']), headers={"Authorization": "Bearer " + conf['pterodactyl']['key']}) as resp:
             pterodata = await resp.json()
         user = pterodata['attributes']
@@ -157,7 +157,7 @@ async def callback(request: Request, code: str):
             "email": user['email'],
             "admin": user['root_admin']
         }
-        await db.kittenpanel.users.update_one({"_id": rr["id"]}, {"$set": {"discord": discord, "pterodactyl": pterodactyl}})   
+        await db.users.update_one({"_id": rr["id"]}, {"$set": {"discord": discord, "pterodactyl": pterodactyl}})   
     response = RedirectResponse("/", status_code=302)
     response.set_cookie(key="kittenpanel_sessionid", value=session, httponly=True)
     return response

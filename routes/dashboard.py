@@ -48,6 +48,31 @@ def resourcesUsed(servers):
         'servers': slots
     }
 
+def resourcesTotal(user, plan):
+    cpu = user['resources']['cpu']
+    ram = user['resources']['ram']
+    disk = user['resources']['disk']
+    backups = user['resources']['backups']
+    ports = user['resources']['ports']
+    databases = user['resources']['database']
+    servers = user['resources']['servers']
+    cpu += plan['resources']['cpu']
+    ram += plan['resources']['ram']
+    disk += plan['resources']['disk']
+    backups += plan['resources']['backups']
+    ports += plan['resources']['ports']
+    databases += plan['resources']['database']
+    servers += plan['resources']['servers']
+    return {
+        'cpu': cpu,
+        'ram': ram,
+        'disk': disk,
+        'backups': backups,
+        'ports': ports,
+        'databases': databases,
+        'servers': servers
+    }
+
 @router.get("/")
 async def dashboard_get(request: Request, user = Depends(get_user)):
     ptero = pterodactyl(request.app.config)
@@ -62,7 +87,14 @@ async def dashboard_get(request: Request, user = Depends(get_user)):
 
 @router.get("/shop")
 async def shop_get(request: Request, user = Depends(get_user)):
-    return request.app.templates.TemplateResponse("dashboard/shop.html", {"request": request, "user": user})
+    ptero = pterodactyl(request.app.config)
+    async with request.app.session.get(f"{ptero}api/application/users/{user['pterodactyl']['id']}?include=servers", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
+        req = await response.json()
+        servers = req['attributes']['relationships']['servers']['data']
+    db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
+    plan = await db.plans.find_one({"_id": user['plan']})
+    return request.app.templates.TemplateResponse("dashboard/shop.html", {"request": request, "user": user, "resourcesUsed": resourcesUsed(servers), "resourcesTotal": resourcesTotal(user, plan)})
 
 @router.get("/server/create")
 async def create_get(request: Request, user = Depends(get_user)):
@@ -71,7 +103,10 @@ async def create_get(request: Request, user = Depends(get_user)):
         req = await response.json()
         servers = req['attributes']['relationships']['servers']['data']
         resources = resourcesUsed(servers)
-    return request.app.templates.TemplateResponse("dashboard/create.html", {"request": request, "user": user, "resourcesUsed": resources})
+    db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
+    plan = await db.plans.find_one({"_id": user['plan']})
+    return request.app.templates.TemplateResponse("dashboard/create.html", {"request": request, "user": user, "resourcesUsed": resources, "resourcesTotal": resourcesTotal(user, plan)})
 
 @router.get("/server/edit/{server_id}")
 async def create_get(request: Request, server_id, user = Depends(get_user)):
@@ -87,5 +122,11 @@ async def create_get(request: Request, server_id, user = Depends(get_user)):
             editServer = server['attributes']
     if not editServer:
         return RedirectResponse(url="/", status_code=302)
-    print(editServer)
-    return request.app.templates.TemplateResponse("dashboard/edit.html", {"request": request, "user": user, "server": editServer, "resourcesUsed": resources})
+    db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
+    plan = await db.plans.find_one({"_id": user['plan']})
+    return request.app.templates.TemplateResponse("dashboard/edit.html", {"request": request, "user": user, "server": editServer, "resourcesUsed": resources, "resourcesTotal": resourcesTotal(user, plan)})
+
+@router.get("/panel")
+async def panel_get(request: Request, user = Depends(get_user)):
+    return request.app.templates.TemplateResponse("dashboard/panel.html", {"request": request, "user": user})

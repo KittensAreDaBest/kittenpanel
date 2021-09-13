@@ -15,7 +15,7 @@
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-400">CPU</p>
-                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['cpu'] }}% / 100%</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['cpu'] }}% / {{ resourcesTotal['cpu'] }}%</p>
             </div>
         </div>
         <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
@@ -27,7 +27,7 @@
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-400">RAM</p>
-                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['ram'] }}MB / 1024MB</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['ram'] }}MB / {{ resourcesTotal['ram'] }}MB</p>
             </div>
         </div>
         <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
@@ -39,7 +39,7 @@
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-400">Disk</p>
-                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['disk'] }}MB / 2048MB </p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['disk'] }}MB / {{ resourcesTotal['disk'] }}MB </p>
             </div>
         </div>
         <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
@@ -51,7 +51,7 @@
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-400">Backups</p>
-                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['backups'] }} / 1</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['backups'] }} / {{ resourcesTotal['backups'] }}</p>
             </div>
         </div>
         <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
@@ -63,7 +63,7 @@
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-400">Extra Ports</p>
-                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['ports'] }} / 1</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['ports'] }} / {{ resourcesTotal['ports'] }}</p>
             </div>
         </div>
         <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
@@ -75,7 +75,7 @@
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-400">Databases</p>
-                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['databases'] }} / 1 </p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['databases'] }} / {{ resourcesTotal['databases'] }}</p>
             </div>
         </div>
         <div class="flex items-center p-4 bg-kittenpanel-dark-secondary rounded-lg shadow-xs">
@@ -87,7 +87,7 @@
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-400">Servers</p>
-                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['servers'] }} / 1</p>
+                <p class="text-lg font-semibold text-gray-200">{{ resourcesUsed['servers'] }} / {{ resourcesTotal['servers'] }}</p>
             </div>
         </div>
     </div>
@@ -99,47 +99,47 @@
     </p>
     <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
         <div class="mt-2">
-            <label class="block text-sm text-white" for="name">Server Name</label>
+            <label class="block text-sm text-white" >Server Name</label>
             <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="name" type="text" placeholder="My Minecraft Server">
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="name">Location</label>
+            <label class="block text-sm text-white" >Location</label>
             <select class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" id="userselect">
                 <option id="1">US, New York</option>
             </select>
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="name">Server Type</label>
+            <label class="block text-sm text-white" >Server Type</label>
             <select class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" id="userselect">
                 <option id="1">PaperMC</option>
             </select>
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="email">CPU ( % )</label>
+            <label class="block text-sm text-white" >CPU ( % )</label>
             <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="email">Ram ( MB )</label>
+            <label class="block text-sm text-white" >Ram ( MB )</label>
             <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ram" type="number" placeholder="1024">
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="email">Disk ( MB )</label>
+            <label class="block text-sm text-white" >Disk ( MB )</label>
             <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="disk" type="number" placeholder="1024">
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="email">Backups</label>
+            <label class="block text-sm text-white" >Backups</label>
             <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="backups" type="number" placeholder="0">
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="email">Extra Ports</label>
+            <label class="block text-sm text-white" >Extra Ports</label>
             <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ports" type="number" placeholder="0">
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-white" for="email">Databases</label>
+            <label class="block text-sm text-white" >Databases</label>
             <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="databases" type="number" placeholder="0">
         </div>
         <div class="mt-6">
-            <button onclick="createServer()" id="updatepassword" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Create Server</button>
+            <button onclick="createServer()" id="createServer" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Create Server</button>
         </div>
     </div>
 </div>

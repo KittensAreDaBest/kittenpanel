@@ -1,0 +1,70 @@
+{% extends "extends/admin.html"%}
+{% block head %}
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+<link href="/static/datatables.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+{% endblock %}
+
+{% block main %}
+
+<div class="flex flex-row-reverse">
+    <a href="{{ url_for('admin_plans_create_get') }}">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-plus-square mr-1"></i>Create Plan</button>
+    </a>
+</div>
+<div class="w-full lg:w-full my-6 pr-2 bg-kittenpanel-dark-secondary p-5 rounded text-white">    
+    <table id="users" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
+        <thead>
+            <tr>
+                <th data-priority="1">Display Name</th>
+                <th data-priority="3">Default Plan</th>
+                <th data-priority="4">CPU</th>
+                <th data-priority="5">RAM</th>
+                <th data-priority="6">DISK</th>
+                <th data-priority="7">SERVERS</th>
+                <th data-priority="8">BACKUPS</th>
+                <th data-priority="9">PORTS</th>
+                <th data-priority="10">DATABASES</th>
+                <th data-priority="11">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-black">
+            {% for i in range(10) %}
+            <tr>
+                <td>Example</td>
+                <td>Example</td>
+                <td>Example</td>
+                <td>Example</td>
+                <td>Example</td>
+                <td>Example</td>
+                <td>Example</td>
+                <td>Example</td>
+                <td>Example</td>
+
+                <td>
+                    <a href="/admin/user/">    
+                        <button class="bg-blue-600 hover:bg-blue-800 p-2 rounded w-10 h-10 m-1"><i class="fas fa-edit text-white"></i></button>
+                    </a>
+                    <a href="{{ panel }}admin/users/view/">
+                        <button class="bg-red-600 hover:bg-red-800 p-2 rounded w-10 h-10 m-1"><i class="fas fa-trash-alt text-white"></i></button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+</div>
+<script>
+    $(document).ready(function() {
+
+        var table = $('#users').DataTable( {
+                responsive: true
+            })
+            .columns.adjust()
+            .responsive.recalc();
+    });
+</script>
+{% endblock %}

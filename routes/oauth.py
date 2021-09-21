@@ -36,14 +36,8 @@ async def login(request: Request):
 @router.get("/callback", response_class=RedirectResponse)
 async def callback(request: Request, code: str):
     conf = request.app.config
-    if conf['forcejoin']['enabled']:
-        scopes = 'identify email guilds guilds.join'
-    else:
-        scopes = 'identify email'
-    if conf['oauth2']['domain'].endswith('/'):
-        redirect_url = f"{conf['oauth2']['domain']}callback"
-    else:
-        redirect_url = f"{conf['oauth2']['domain']}/callback"
+    scopes = 'identify email guilds guilds.join' if conf['forcejoin']['enabled'] else 'identify email'
+    redirect_url = f"{conf['oauth2']['domain']}callback" if conf['oauth2']['domain'].endswith('/') else f"{conf['oauth2']['domain']}/callback"
     async with request.app.session.post("https://discord.com/api/oauth2/token", headers={"Content-Type": "application/x-www-form-urlencoded"}, data={"client_id": conf['oauth2']['id'], "client_secret": conf['oauth2']['secret'], "grant_type": "authorization_code", "code": code, "redirect_uri": redirect_url}) as resp:
         resp = await resp.json()
         try:
@@ -67,15 +61,13 @@ async def callback(request: Request, code: str):
     db = await request.app.database.get_db_client()
     db = db[request.app.config['database']['database']]
     await db.sessions.insert_one({"_id": session, "user_id": rr["id"], "accesstoken": resp["access_token"], "expires": time.time() + 518400})
-    if conf['pterodactyl']['domain'].endswith('/'):
-        pterodactyl = f"{conf['pterodactyl']['domain']}"
-    else:
-        pterodactyl = f"{conf['pterodactyl']['domain']}/"
+    pterodactyl = f"{conf['pterodactyl']['domain']}" if conf['pterodactyl']['domain'].endswith('/') else f"{conf['pterodactyl']['domain']}/"
     if not await db.users.find_one({"_id": rr["id"]}):
         async with request.app.session.get(pterodactyl + "api/application/users?include=servers&filter[email]=" + quote(rr['email']), headers={"Authorization": "Bearer " + conf['pterodactyl']['key']}) as resp:
             data = await resp.json()
             if data['meta']['pagination']['total'] == 0:
-                async with request.app.session.post(pterodactyl + "api/application/users", json={"username": str(rr['id']), "email": rr['email'], "first_name": rr['username'], "last_name": '#' + rr['discriminator']}) as resp:
+                async with request.app.session.post(pterodactyl + "api/application/users", json={"username": str(rr['id']), "email": rr['email'], "first_name": rr['username'], "last_name": '#' + rr['discriminator']}, headers={"Authorization": "Bearer " + conf['pterodactyl']['key']}) as resp:
+                    print(await resp.text())
                     dd = await resp.json()
                     await db.users.insert_one({
                         "_id": rr['id'], 
@@ -99,10 +91,10 @@ async def callback(request: Request, code: str):
                             "email": rr["email"]
                         },
                         "pterodactyl": {
-                            "id": dd['id'],
-                            "username": dd['username'],
-                            "email": dd['email'],
-                            "admin": dd['root_admin']
+                            "id": dd['attributes']['id'],
+                            "username": dd['attributes']['username'],
+                            "email": dd['attributes']['email'],
+                            "admin": dd['attributes']['root_admin']
                         },
                     })
             else:
@@ -149,8 +141,6 @@ async def callback(request: Request, code: str):
         async with request.app.session.get(pterodactyl + "api/application/users/" + str(user['pterodactyl']['id']), headers={"Authorization": "Bearer " + conf['pterodactyl']['key']}) as resp:
             pterodata = await resp.json()
         user = pterodata['attributes']
-        if user['email'] != rr['email']:
-            raise Exception("Well this shouldnt be happening since its being filtered. Raising exception to prevent any security problems")
         pterodactyl = {
             "id": user['id'],
             "username": user['username'],

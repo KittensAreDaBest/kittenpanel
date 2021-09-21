@@ -1,0 +1,74 @@
+{% extends "extends/admin.html"%}
+{% block head %}
+<script>
+function nospaces(t){
+  if(t.value.match(/\s/g)){
+    t.value=t.value.replace(/\s/g,'');
+  }
+}
+</script>
+<style>
+    /* Toggle B (taken from https://codepen.io/lhermann/pen/EBGZRZ ) */
+    input:checked ~ .dot {
+      transform: translateX(100%);
+      background-color: #48bb78;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2">
+    
+
+    <p class="text-xl text-white pb-2 flex items-center">
+        Create Plan
+    </p>
+    <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Plan Name</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="name" type="text" onkeyup="nospaces(this)">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >CPU ( % )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Ram ( MB )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ram" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Disk ( MB )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="disk" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Backups</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="backups" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Extra Ports</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ports" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Databases</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="databases" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="flex mt-5 items-center cursor-pointer">
+                <div class="relative">
+                    <input type="checkbox" class="sr-only">
+                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                </div>
+                <div class="ml-3 text-white font-medium" id="cpu-shop-label">
+                    Default Plan
+                </div>
+            </label>
+        </div>
+
+
+        <div class="mt-6">
+            <button class="px-4 py-1 text-white bg-blue-600 hover:bg-blue-800 rounded" type="submit">Create Plan</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

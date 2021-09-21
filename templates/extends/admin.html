@@ -1,4 +1,3 @@
-
 <!--
 =========================================================
 ██   ██ ██ ████████ ████████ ███████ ███    ██ ██████   █████  ███    ██ ███████ ██      
@@ -22,7 +21,7 @@ in all copies or substantial portions of the Software.
     <head>
         <meta charset="utf-8">  
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ request.app.config['appname'] }}</title>
+        <title>{{ request.app.config['appname'] }} | Admin Panel</title>
         <link></link>
         <link href="/static/tailwind.css" rel="stylesheet">
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -44,7 +43,7 @@ in all copies or substantial portions of the Software.
         <nav id="header" class="bg-kittenpanel-dark-secondary fixed w-full z-10 top-0 shadow">
             <div class="w-full container mx-auto flex flex-wrap items-center mt-0 pt-3 pb-3 md:pb-0">
                 <div class="w-1/2 pl-2 md:pl-0">
-                    <a class="text-gray-100 text-base xl:text-xl no-underline hover:no-underline font-bold">{{ request.app.config['appname'] }}</a>
+                    <a class="text-gray-100 text-base xl:text-xl no-underline hover:no-underline font-bold">{{ request.app.config['appname'] }} | Admin Panel</a>
                 </div>
                 <div class="w-1/2 pr-0">
                     <div class="flex relative float-right">
@@ -53,7 +52,7 @@ in all copies or substantial portions of the Software.
                             <img class="w-8 h-8 rounded-full mr-4" src="https://cdn.discordapp.com/avatars/{{ user['_id'] }}/{{ user['discord']['avatar'] }}.webp" alt="Avatar of User"> 
                                 <div class="flex flex-col">
                                     <span class="hidden md:inline-block text-gray-100">{{ user['discord']['username'] }}</span>
-                                    <span class="hidden md:inline-block text-gray-400 text-xs text-left">{{ user['resources']['credits'] }} Credits</span>
+                                    <span class="hidden md:inline-block text-gray-400 text-xs text-left">Administrator</span>
                                 </div>
                                 <svg class="pl-2 h-2 fill-current text-gray-100" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129"><g><path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"/></g></svg>
                             </button>
@@ -73,36 +72,45 @@ in all copies or substantial portions of the Software.
                 <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 secondary-dark z-20" id="nav-content">
                     <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
                         <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('admin_dash_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-desktop mr-3"></i><span class="pb-1 md:pb-0 text-sm">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('admin_users_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-user mr-3"></i><span class="pb-1 md:pb-0 text-sm">Users</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('admin_codes_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-barcode mr-3"></i><span class="pb-1 md:pb-0 text-sm">Promo Codes</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('admin_types_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-th-large mr-3"></i><span class="pb-1 md:pb-0 text-sm">Server Type / Eggs</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('admin_plans_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-list mr-3"></i><span class="pb-1 md:pb-0 text-sm">Plans</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('admin_locations_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-globe mr-3"></i><span class="pb-1 md:pb-0 text-sm">Locations</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
+                            <a href="{{ url_for('admin_config_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
+                                <i class="fas fa-cog mr-3"></i><span class="pb-1 md:pb-0 text-sm">Config</span>
+                            </a>
+                        </li>
+                        <li class="mr-6 my-2 md:my-0">
                             <a href="{{ url_for('dashboard_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
-                                <i class="fas fa-desktop mr-3"></i><span class="pb-1 md:pb-0 text-sm">Your Servers</span>
+                                <i class="fas fa-sign-out-alt mr-3"></i><span class="pb-1 md:pb-0 text-sm">Exit to Client Area</span>
                             </a>
                         </li>
-                        {% if config['server']['creation'] %}
-                        <li class="mr-6 my-2 md:my-0">
-                            <a href="{{ url_for('create_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
-                                <i class="far fa-plus-square mr-3"></i><span class="pb-1 md:pb-0 text-sm">Create Server</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if config['shop']['codes'] or config['shop']['cpu']['enabled'] or config['shop']['ram']['enabled'] or config['shop']['disk']['enabled'] or config['shop']['backups']['enabled'] or config['shop']['ports']['enabled'] or config['shop']['databases']['enabled'] or config['shop']['servers']['enabled'] %}
-                        <li class="mr-6 my-2 md:my-0">
-                            <a href="{{ url_for('shop_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
-                                <i class="fas fa-store mr-3"></i><span class="pb-1 md:pb-0 text-sm">Resource Shop</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                        <li class="mr-6 my-2 md:my-0">
-                            <a href="{{ url_for('panel_get') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
-                                <i class="fas fa-external-link-alt mr-3"></i><span class="pb-1 md:pb-0 text-sm">Panel</span>
-                            </a>
-                        </li>
-                        {% if user['pterodactyl']['admin'] == True %}
-                        <li class="mr-6 my-2 md:my-0">
-                            <a href="/admin" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-kittenpanel-dark-secondary hover:border-blue-300">
-                                <i class="fas fa-users-cog mr-3"></i><span class="pb-1 md:pb-0 text-sm">Admin Panel</span>
-                            </a>
-                        </li>
-                        {% endif %} 
                     </ul>  
                 </div>
             </div>

@@ -1,0 +1,63 @@
+{% extends "extends/admin.html"%}
+{% block head %}
+<script>
+function nospaces(t){
+  if(t.value.match(/\s/g)){
+    t.value=t.value.replace(/\s/g,'');
+  }
+}
+</script>
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2">
+    
+
+    <p class="text-xl text-white pb-2 flex items-center">
+        Create Location
+    </p>
+    <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Location Display Name</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="name" type="text" onkeyup="nospaces(this)">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Location</label>
+            <select class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-gray" id="userselect">
+                <option id="1">US, New York</option>
+            </select>
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Allowed Plans ( select "All Plans" for all allowed )</label>
+            <select
+                class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-gray"
+                multiple
+            >
+                <option>All Plans</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+                <option>Option 4</option>
+                <option>Option 5</option>
+            </select>
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Allowed Eggs ( select "All Eggs" for all allowed )</label>
+            <select
+                class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-gray"
+                multiple
+            >
+                <option>All Eggs</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+                <option>Option 4</option>
+                <option>Option 5</option>
+            </select>
+        </div>
+        <div class="mt-6">
+            <button onclick="createCode()" id="createServer" class="px-4 py-1 text-white bg-blue-600 hover:bg-blue-800 rounded" type="submit">Create Location</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

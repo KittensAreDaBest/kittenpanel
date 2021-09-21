@@ -5,9 +5,9 @@ import json
 from starlette.responses import JSONResponse, RedirectResponse
 import uvicorn
 import aiohttp
-from routes import api_admin, api_client, oauth, dashboard, default
+from routes import api_admin, api_client, oauth, dashboard, admin
 from utils import mongodb
-from dependencies import AuthenticationException
+from dependencies import AuthenticationException, AdminException
 import subprocess
 import os
 import sys
@@ -32,7 +32,11 @@ async def authentication_exception_handler(request: Request, exc: Authentication
         return JSONResponse({"code": 403, "message": "Your account is disabled"})
     return RedirectResponse(url="/login", status_code=302)
 
-routes = [api_admin, api_client, oauth, dashboard, default]
+@app.exception_handler(AdminException)
+async def admin_exception_handler(request: Request, exc: AdminException):
+    return RedirectResponse(url="/", status_code=302)
+    
+routes = [api_admin, api_client, oauth, dashboard, admin]
 for route in routes:
     app.include_router(route.router)
 

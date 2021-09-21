@@ -91,76 +91,150 @@
             </div>
         </div>
     </div>
+    {% if config['shop']['codes'] %}
+    <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
+        <div class="mt-2">
+            <label class="block text-sm text-white" id="databases-name">Redeem Promo Code.</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="databases" type="text">
+        </div>
+        <div class="mt-6">
+            <button onclick="promoCode()"  class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Add Promo</button>
+        </div>
+    </div>
+    {% endif %}
 
-
-    
-    <p class="text-xl text-white pb-2 flex items-center">
+    {% if config['shop']['cpu']['enabled'] or config['shop']['ram']['enabled'] or config['shop']['disk']['enabled'] or config['shop']['backups']['enabled'] or config['shop']['ports']['enabled'] or config['shop']['databases']['enabled'] or config['shop']['servers']['enabled'] %}
+    <p class="text-xl mt-6 text-white pb-2 flex items-center">
         Shop
     </p>
     <div class="grid gap-6 mb-8 md:grid-cols-1 xl:grid-cols-2">
+        {% if config['shop']['cpu']['enabled'] %}
         <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
             <div class="mt-2">
-                <label class="block text-sm text-white" >CPU ( % ). This will cost 0 coins.</label>
-                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="0">
+                <label class="block text-sm text-white" id="cpu-name">CPU ( % ). This will cost 0 coins.</label>
+                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" oninput="calcValue(this.value, 'cpu', {{ config['shop']['cpu']['price'] }})" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" placeholder="0">
             </div>
             <div class="mt-6">
-                <button onclick="purchaseCPU()"  class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Purchase CPU</button>
+                <button onclick="purchaseCPU()"  class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Purchase CPU</button>
             </div>
         </div>
+        {% endif %}
+        {% if config['shop']['ram']['enabled'] %}
         <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
             <div class="mt-2">
-                <label class="block text-sm text-white" >RAM ( MB ). This will cost 0 coins.</label>
-                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ram" type="number" placeholder="0">
+                <label class="block text-sm text-white" id="ram-name">RAM ( MB ). This will cost 0 coins.</label>
+                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ram" type="number" placeholder="0" oninput="calcValue(this.value, 'ram', {{ config['shop']['ram']['price'] }})" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
             </div>
             <div class="mt-6">
-                <button onclick="purchaseRAM()"  class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Purchase RAM</button>
+                <button onclick="purchaseRAM()"  class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Purchase RAM</button>
             </div>
         </div>
+        {% endif %}
+        {% if config['shop']['disk']['enabled'] %}
         <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
             <div class="mt-2">
-                <label class="block text-sm text-white" >Disk ( MB ). This will cost 0 coins.</label>
-                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="disk" type="number" placeholder="0">
+                <label class="block text-sm text-white" id="disk-name">Disk ( MB ). This will cost 0 coins.</label>
+                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="disk" type="number" placeholder="0" oninput="calcValue(this.value, 'disk', {{ config['shop']['disk']['price'] }})" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
             </div>
             <div class="mt-6">
-                <button onclick="purchaseDisk()"  class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Purchase Disk</button>
+                <button onclick="purchaseDisk()"  class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Purchase Disk</button>
             </div>
         </div>
+        {% endif %}
+        {% if config['shop']['backups']['enabled'] %}
         <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
             <div class="mt-2">
-                <label class="block text-sm text-white" >Backups. This will cost 0 coins.</label>
-                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="backups" type="number" placeholder="0">
+                <label class="block text-sm text-white" id="backups-name">Backups. This will cost 0 coins.</label>
+                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="backups" type="number" placeholder="0" oninput="calcValue(this.value, 'backups', {{ config['shop']['backups']['price'] }})" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
             </div>
             <div class="mt-6">
-                <button onclick="purchaseBackups()"  class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Purchase Backups</button>
+                <button onclick="purchaseBackups()"  class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Purchase Backups</button>
             </div>
         </div>
+        {% endif %}
+        {% if config['shop']['ports']['enabled'] %}
         <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
             <div class="mt-2">
-                <label class="block text-sm text-white" >Extra Ports. This will cost 0 coins.</label>
-                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ports" type="number" placeholder="0">
+                <label class="block text-sm text-white" id="ports-name" >Extra Ports. This will cost 0 coins.</label>
+                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ports" type="number" placeholder="0" oninput="calcValue(this.value, 'ports', {{ config['shop']['ports']['price'] }})" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
             </div>
             <div class="mt-6">
-                <button onclick="purchasePorts()"  class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Purchase Ports</button>
+                <button onclick="purchasePorts()"  class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Purchase Ports</button>
             </div>
         </div>
+        {% endif %}
+        {% if config['shop']['databases']['enabled'] %}
         <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
             <div class="mt-2">
-                <label class="block text-sm text-white" >Databases. This will cost 0 coins.</label>
-                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="databases" type="number" placeholder="0">
+                <label class="block text-sm text-white" id="databases-name">Databases. This will cost 0 coins.</label>
+                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="databases" type="number" placeholder="0" oninput="calcValue(this.value, 'databases', {{ config['shop']['databases']['price'] }})" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
             </div>
             <div class="mt-6">
-                <button onclick="purchaseDatabases()"  class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Purchase Databases</button>
+                <button onclick="purchaseDatabases()"  class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Purchase Databases</button>
             </div>
         </div>
+        {% endif %}
+        {% if config['shop']['servers']['enabled'] %}
         <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
             <div class="mt-2">
-                <label class="block text-sm text-white" >Server Slots. This will cost 0 coins.</label>
-                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="servers" type="number" placeholder="0">
+                <label class="block text-sm text-white" id="servers-name">Server Slots. This will cost 0 coins.</label>
+                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="servers" type="number" placeholder="0" oninput="calcValue(this.value, 'servers', {{ config['shop']['servers']['price'] }})" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
             </div>
             <div class="mt-6">
-                <button onclick="purchaseServers()"  class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Purchase Servers</button>
+                <button onclick="purchaseServers()" class="px-4 py-1 text-white  bg-blue-600 hover:bg-blue-800 rounded" type="submit">Purchase Servers</button>
             </div>
         </div>
+        {% endif %}
     </div>
+    {% endif %}
 </div>
+<script>
+function calcValue(many, id, price) {
+    var cost = many * price;
+    var credits = "{{ user['resources']['credits'] }}";
+    if (cost > credits) {
+        switch(id) {
+            case 'servers':
+                document.getElementById('servers-name').innerHTML = 'Server Slots. This will cost ' + cost + ' coins. ' + "You don't have enough credits to purchase this many server slots.";
+                break;
+            case 'databases':
+                document.getElementById('databases-name').innerHTML = 'Databases. This will cost ' + cost + ' coins. ' + "You don't have enough credits to purchase this many databases.";
+                break;
+            case 'backups':
+                document.getElementById('backups-name').innerHTML = 'Backups. This will cost ' + cost + ' coins. ' + "You don't have enough credits to purchase this many backups.";
+                break;
+            case 'ports':
+                document.getElementById('ports-name').innerHTML = 'Extra Ports. This will cost ' + cost + ' coins. ' + "You don't have enough credits to purchase this many extra ports.";
+                break;
+            case 'cpu':
+                document.getElementById('cpu-name').innerHTML = 'CPU. This will cost ' + cost + ' coins. ' + "You don't have enough credits to purchase this many CPUs.";
+                break;
+            case 'ram':
+                document.getElementById('ram-name').innerHTML = 'RAM. This will cost ' + cost + ' coins. ' + "You don't have enough credits to purchase this many RAM.";
+                break;
+        }
+        return;
+    }
+    switch(id) { 
+        case 'servers':
+            document.getElementById('servers-name').innerHTML = 'Server Slots. This will cost ' + cost + ' coins.';
+            break;
+        case 'databases':
+            document.getElementById('databases-name').innerHTML = 'Databases. This will cost ' + cost + ' coins.';
+            break;
+        case 'backups':
+            document.getElementById('backups-name').innerHTML = 'Backups. This will cost ' + cost + ' coins.';
+            break;
+        case 'ports':
+            document.getElementById('ports-name').innerHTML = 'Extra Ports. This will cost ' + cost + ' coins.';
+            break;
+        case 'cpu':
+            document.getElementById('cpu-name').innerHTML = 'CPU. This will cost ' + cost + ' coins.';
+            break;
+        case 'ram':
+            document.getElementById('ram-name').innerHTML = 'RAM. This will cost ' + cost + ' coins.';
+            break;
+    }
+}
+</script>
 {% endblock %}

@@ -1,0 +1,53 @@
+{% extends "extends/admin.html"%}
+{% block head %}
+<script>
+function nospaces(t){
+  if(t.value.match(/\s/g)){
+    t.value=t.value.replace(/\s/g,'');
+  }
+}
+</script>
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2">
+    
+
+    <p class="text-xl text-white pb-2 flex items-center">
+        Editing Code
+    </p>
+    <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Code ID</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="name" type="text" onkeyup="nospaces(this)">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >CPU ( % )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Ram ( MB )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ram" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Disk ( MB )</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="disk" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Backups</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="backups" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Extra Ports</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="ports" type="number">
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-white" >Databases</label>
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="databases" type="number">
+        </div>
+        <div class="mt-6 flex flex-row">
+            <button onclick="createCode()" id="createServer" class="px-4 py-1 text-white  tracking-wider bg-gray-900 rounded" type="submit">Create Code</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

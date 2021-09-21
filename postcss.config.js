@@ -5,6 +5,6 @@ module.exports = {
     plugins: [
         tailwindcss('./tailwind.js'),
         require('autoprefixer'),
-        //purgecss({content: ['templates/*.html', 'templates/**/*.html']})
+        purgecss({content: ['templates/*.html', 'templates/**/*.html', 'templates/**/**/*.html']})
     ],
 };

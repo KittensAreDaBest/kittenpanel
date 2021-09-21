@@ -30,10 +30,16 @@
                 <td class="text-left py-3 px-4">{{ server['attributes']['feature_limits']['allocations'] - 1 if server['attributes']['feature_limits']['allocations'] != 0 else server['attributes']['feature_limits']['allocations'] }}</td>
                 <td class="text-left py-3 px-4">{{ server['attributes']['feature_limits']['backups'] }}</td>
                 <td class="w-1/4 text-left py-3 px-4">
+                    {% if config['server']['deletion'] %}
                     <button class="bg-red-600 p-2 rounded w-10 h-10 m-1"><i class="fas fa-trash text-white"></i></button>
+                    {% endif %}
+
+                    {% if config['server']['update'] %}
                     <a href="/server/edit/{{ server['attributes']['identifier'] }}">
                         <button class="bg-blue-600 p-2 rounded w-10 h-10 m-1"><i class="fas fa-edit text-white"></i></button>
                     </a>
+                    {% endif %}
+
                     <a href="{{ panel }}server/{{ server['attributes']['identifier'] }}">
                         <button class="bg-gray-600 p-2 rounded w-10 h-10 m-1"><i class="fas fa-external-link-alt text-white"></i></button>
                     </a>
@@ -43,8 +49,8 @@
         </tbody>
     </table>
     {% else %}
-    <div class="flex flex-col">
-        <span class="text-center">You do not have any servers.</span>
+    <div class="flex flex-col bg-kittenpanel-dark-background">
+        <span class="text-center text-white font-bold text-2xl">You do not have any servers.</span>
     </div>
     {% endif %}
 </div>

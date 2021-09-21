@@ -6,12 +6,6 @@ from dependencies import get_user
 import math
 router = APIRouter()
 
-def pterodactyl(config):
-    if config['pterodactyl']['domain'].endswith('/'):
-        pterodactyl = f"{config['pterodactyl']['domain']}"
-    else:
-        pterodactyl = f"{config['pterodactyl']['domain']}/"
-    return pterodactyl
 def convert_size(size_bytes):
    if size_bytes == 0:
        return "0MB"
@@ -75,7 +69,7 @@ def resourcesTotal(user, plan):
 
 @router.get("/")
 async def dashboard_get(request: Request, user = Depends(get_user)):
-    ptero = pterodactyl(request.app.config)
+    ptero = f"{request.app.config['pterodactyl']['domain']}" if request.app.config['pterodactyl']['domain'].endswith('/') else f"{request.app.config['pterodactyl']['domain']}/"
     async with request.app.session.get(f"{ptero}api/application/users/{user['pterodactyl']['id']}?include=servers", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
         req = await response.json()
         servers = req['attributes']['relationships']['servers']['data']
@@ -83,22 +77,26 @@ async def dashboard_get(request: Request, user = Depends(get_user)):
         server['attributes']['limits']['memory'] = convert_size(server['attributes']['limits']['memory']) if server['attributes']['limits']['memory'] != 0 else "Unlimited"
         server['attributes']['limits']['disk'] = convert_size(server['attributes']['limits']['disk']) if server['attributes']['limits']['disk'] != 0 else "Unlimited"
         server['attributes']['limits']['cpu'] = server['attributes']['limits']['cpu'] if server['attributes']['limits']['cpu'] != 0 else "Unlimited"  
-    return request.app.templates.TemplateResponse("dashboard/dash.html", {"request": request, "user": user, "servers": servers, "panel": ptero})
+    db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
+    config = await db.config.find_one({"_id": 1})
+    return request.app.templates.TemplateResponse("dashboard/dash.html", {"request": request, "user": user, "servers": servers, "panel": ptero, "config": config})
 
 @router.get("/shop")
 async def shop_get(request: Request, user = Depends(get_user)):
-    ptero = pterodactyl(request.app.config)
+    ptero = f"{request.app.config['pterodactyl']['domain']}" if request.app.config['pterodactyl']['domain'].endswith('/') else f"{request.app.config['pterodactyl']['domain']}/"
     async with request.app.session.get(f"{ptero}api/application/users/{user['pterodactyl']['id']}?include=servers", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
         req = await response.json()
         servers = req['attributes']['relationships']['servers']['data']
     db = await request.app.database.get_db_client()
     db = db[request.app.config['database']['database']]
     plan = await db.plans.find_one({"_id": user['plan']})
-    return request.app.templates.TemplateResponse("dashboard/shop.html", {"request": request, "user": user, "resourcesUsed": resourcesUsed(servers), "resourcesTotal": resourcesTotal(user, plan)})
+    config = await db.config.find_one({"_id": 1})
+    return request.app.templates.TemplateResponse("dashboard/shop.html", {"request": request, "user": user, "config": config, "resourcesUsed": resourcesUsed(servers), "resourcesTotal": resourcesTotal(user, plan), "config": config})
 
 @router.get("/server/create")
 async def create_get(request: Request, user = Depends(get_user)):
-    ptero = pterodactyl(request.app.config)
+    ptero = f"{request.app.config['pterodactyl']['domain']}" if request.app.config['pterodactyl']['domain'].endswith('/') else f"{request.app.config['pterodactyl']['domain']}/"
     async with request.app.session.get(f"{ptero}api/application/users/{user['pterodactyl']['id']}?include=servers", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
         req = await response.json()
         servers = req['attributes']['relationships']['servers']['data']
@@ -106,11 +104,12 @@ async def create_get(request: Request, user = Depends(get_user)):
     db = await request.app.database.get_db_client()
     db = db[request.app.config['database']['database']]
     plan = await db.plans.find_one({"_id": user['plan']})
-    return request.app.templates.TemplateResponse("dashboard/create.html", {"request": request, "user": user, "resourcesUsed": resources, "resourcesTotal": resourcesTotal(user, plan)})
+    config = await db.config.find_one({"_id": 1})
+    return request.app.templates.TemplateResponse("dashboard/server/create.html", {"request": request, "user": user, "resourcesUsed": resources, "resourcesTotal": resourcesTotal(user, plan), "config": config})
 
 @router.get("/server/edit/{server_id}")
 async def create_get(request: Request, server_id, user = Depends(get_user)):
-    ptero = pterodactyl(request.app.config)
+    ptero = f"{request.app.config['pterodactyl']['domain']}" if request.app.config['pterodactyl']['domain'].endswith('/') else f"{request.app.config['pterodactyl']['domain']}/"
     async with request.app.session.get(f"{ptero}api/application/users/{user['pterodactyl']['id']}?include=servers", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
         req = await response.json()
         servers = req['attributes']['relationships']['servers']['data']
@@ -125,8 +124,12 @@ async def create_get(request: Request, server_id, user = Depends(get_user)):
     db = await request.app.database.get_db_client()
     db = db[request.app.config['database']['database']]
     plan = await db.plans.find_one({"_id": user['plan']})
-    return request.app.templates.TemplateResponse("dashboard/edit.html", {"request": request, "user": user, "server": editServer, "resourcesUsed": resources, "resourcesTotal": resourcesTotal(user, plan)})
+    config = await db.config.find_one({"_id": 1})
+    return request.app.templates.TemplateResponse("dashboard/server/edit.html", {"request": request, "user": user, "server": editServer, "resourcesUsed": resources, "resourcesTotal": resourcesTotal(user, plan), "config": config})
 
 @router.get("/panel")
 async def panel_get(request: Request, user = Depends(get_user)):
-    return request.app.templates.TemplateResponse("dashboard/panel.html", {"request": request, "user": user})
+    db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
+    config = await db.config.find_one({"_id": 1})
+    return request.app.templates.TemplateResponse("dashboard/panel.html", {"request": request, "user": user, "config": config})

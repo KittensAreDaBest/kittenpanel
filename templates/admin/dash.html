@@ -1,0 +1,56 @@
+{% extends "extends/admin.html"%}
+{% block head %}
+<script>
+    var version = "{{request.app.config['version']}}";
+    $(document).ready(function(){
+        var updateColor = document.getElementById('update-color');
+        var updateText = document.getElementById('update-text');
+        $.ajax({
+            url: 'https://api.kittenpanel.xyz/version',
+            dataType: 'json',
+            success: function(data) {
+                var latest = data.version;
+                if (latest != version) {
+                    updateColor.classList.add("border-red-500");
+                    updateText.innerHTML = `Your panel is not up-to-date! The latest version is ${latest} and you are currently running version ${version}.`;
+                } else {
+                    updateColor.classList.add("border-green-500");
+                    updateText.innerHTML = `Your panel is up-to-date! You are currently running version ${version}.`;
+                }
+            },
+            error: function(data) {
+                updateColor.classList.add("border-gray-500");
+                updateText.innerHTML = `Unable to check for updates. You are currently running version ${version}.`;
+            }  
+        });
+    });
+</script>
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2">    
+    <div class="flex flex-col items-center">
+        <div id="update-color" class="p-5 w-full bg-kittenpanel-dark-secondary rounded shadow-xl border-t-8">
+            <label class="block text-3xl text-white" >System Information</label>
+            <label id="update-text" class="mt-1 block text-xl text-white" >Checking for Updates.</label>
+        </div>
+    </div>
+    <div class="flex flex-row items-center mt-5">
+        <div class="w-full lg:w-1/3 p-1">
+            <a href="https://discord.gg/a7ADm7NSnx">
+                <button class="w-full bg-green-600 hover:bg-green-800 text-white p-2 text-xl rounded shadow-xl"><i class="fab fa-discord mr-1"></i>Support (via Discord)</button>
+            </a>
+        </div>
+        <div class="w-full lg:w-1/3 p-1">
+            <a href="https://github.com/kittensaredabest/kittenpanel">
+                <button class="w-full bg-blue-600 hover:bg-blue-800 text-white p-2 text-xl rounded shadow-xl"><i class="fab fa-github-square mr-1"></i>Github</button>
+            </a>
+        </div>
+        <div class="w-full lg:w-1/3 p-1">
+            <a href="https://docs.kittenpanel.xyz">
+                <button class="w-full bg-indigo-600 hover:bg-indigo-800 text-white p-2 text-xl rounded shadow-xl"><i class="fas fa-book mr-1"></i>Documentation</button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

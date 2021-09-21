@@ -1,0 +1,51 @@
+{% extends "extends/admin.html"%}
+{% block head %}
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+<link href="/static/datatables.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2 bg-kittenpanel-dark-secondary p-5 rounded text-white">    
+
+    <table id="users" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
+        <thead>
+            <tr>
+                <th data-priority="1">Username ( userid )</th>
+                <th data-priority="2">Email</th>
+                <th data-priority="3">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-black">
+            {% for i in range(100) %}
+            <tr>
+                <td>Example User</td>
+                <td>Example Email</td>
+                <td>
+                    <a href="#">    
+                        <button class="bg-blue-600 hover:bg-blue-800 p-2 rounded w-10 h-10 m-1"><i class="fas fa-edit text-white"></i></button>
+                    </a>
+                    <a href="{{ panel }}admin/users/view/">
+                        <button class="bg-gray-600 hover:bg-gray-800 p-2 rounded w-10 h-10 m-1"><i class="fas fa-external-link-alt text-white"></i></button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+</div>
+<script>
+    $(document).ready(function() {
+
+        var table = $('#users').DataTable( {
+                responsive: true
+            })
+            .columns.adjust()
+            .responsive.recalc();
+    });
+
+</script>
+{% endblock %}

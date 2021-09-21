@@ -1,0 +1,308 @@
+{% extends "extends/admin.html"%}
+{% block head %}
+<style>
+/* Toggle B (taken from https://codepen.io/lhermann/pen/EBGZRZ ) */
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #48bb78;
+}
+</style>
+<script>
+    function handleSwitchShop(cb, shop_id, display_name) {
+        var shop = document.getElementById(shop_id + "-shop-label");
+        shop.innerHTML = cb.checked ? display_name + " Shop Enabled" : display_name + " Shop Disabled";
+        var shop_div = document.getElementById(shop_id + "-shop-options");
+        shop_div.style.display = cb.checked ? "block" : "none";
+    }
+    function handlePriceing(value, id, display_name) {
+        var price = document.getElementById(id + "-price-label");
+        price.innerHTML = display_name + " Price: " + value;
+    }
+    function handleSwitchServer(cb, server_id, display_name) {
+        var server = document.getElementById(server_id);
+        server.innerHTML = cb.checked ? display_name + " Enabled" : display_name + " Disabled";
+    }
+    function handleSwitchUser(cb, user_id, display_name) {
+        var user = document.getElementById(user_id);
+        user.innerHTML = cb.checked ? display_name + " Enabled" : display_name + " Disabled";
+    }
+    function handlePromoSwitch(cb, promo_id, display_name) {
+        var promo = document.getElementById(promo_id);
+        promo.innerHTML = cb.checked ? display_name + " Enabled" : display_name + " Disabled";
+    }
+</script>
+{% endblock %}
+
+{% block main %}
+<div class="w-full lg:w-full my-6 pr-2">
+    <p class="text-xl text-white pb-2 flex items-center">
+        Config
+    </p>
+    <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
+        <div class="w-full lg:w-full" id="shop-div">
+            <div class="p-5 bg-gray-900 rounded shadow-xl">
+                <div class="flex flex-row-reverse">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-save mr-1"></i>Save Shop Config</button>
+                </div>
+                <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchShop(this, "cpu", "CPU");' class="sr-only" {{ 'checked' if config['shop']['cpu']['enabled'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="cpu-shop-label">
+                                    CPU Shop {{ 'Enabled' if config['shop']['cpu']['enabled'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                        <div id="cpu-shop-options" style="{{ 'display: block;' if config['shop']['cpu']['enabled'] else 'display: none;' }}">
+                            <div class="mt-2">
+                                <label class="block text-sm text-white">How many coins for 1% CPU</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                            <div class="mt-2">
+                                <label class="block text-sm text-white">Minimum CPU Purchase ( % )</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchShop(this, "ram", "RAM");' class="sr-only" {{ 'checked' if config['shop']['ram']['enabled'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="ram-shop-label">
+                                    RAM Shop {{ 'Enabled' if config['shop']['ram']['enabled'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                        <div id="ram-shop-options" style="{{ 'display: block;' if config['shop']['ram']['enabled'] else 'display: none;' }}">
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >How many coins for 1MB Ram</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >Minimum RAM Purchase ( mb )</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchShop(this, "disk", "Disk");' class="sr-only" {{ 'checked' if config['shop']['disk']['enabled'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="disk-shop-label">
+                                    Disk Shop {{ 'Enabled' if config['shop']['disk']['enabled'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                        <div id="disk-shop-options" style="{{ 'display: block;' if config['shop']['disk']['enabled'] else 'display: none;' }}">
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >How many coins for 1MB Disk</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >Minimum Disk Purchase ( MB )</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchShop(this, "backups", "Backups");' class="sr-only" {{ 'checked' if config['shop']['backups']['enabled'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="backups-shop-label">
+                                    Backups Shop {{ 'Enabled' if config['shop']['backups']['enabled'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                        <div id="backups-shop-options" style="{{ 'display: block;' if config['shop']['backups']['enabled'] else 'display: none;' }}">
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >How many coins for 1 Backup</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchShop(this, "ports", "Extra Ports");' class="sr-only" {{ 'checked' if config['shop']['ports']['enabled'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="ports-shop-label">
+                                    Extra Ports Shop {{ 'Enabled' if config['shop']['ports']['enabled'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                        <div id="ports-shop-options" style="{{ 'display: block;' if config['shop']['ports']['enabled'] else 'display: none;' }}">
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >How many coins for 1 Extra Port</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchShop(this, "database", "Databases");' class="sr-only" {{ 'checked' if config['shop']['databases']['enabled'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="database-shop-label">
+                                    Databases Shop {{ 'Enabled' if config['shop']['databases']['enabled'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                        <div id="database-shop-options" style="{{ 'display: block;' if config['shop']['databases']['enabled'] else 'display: none;' }}">
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >How many coins for 1 Databases</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchShop(this, "slots", "Server Slots");' class="sr-only" {{ 'checked' if config['shop']['servers']['enabled'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="slots-shop-label">
+                                    Server Slots Shop {{ 'Enabled' if config['shop']['servers']['enabled'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                        <div id="slots-shop-options" style="{{ 'display: block;' if config['shop']['servers']['enabled'] else 'display: none;' }}">
+                            <div class="mt-2">
+                                <label class="block text-sm text-white" >How many coins for 1 Server Slot</label>
+                                <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="cpu" type="number" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handlePromoSwitch(this, "promocode-label", "Promo Codes");' class="sr-only" {{ 'checked' if config['codes'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="promocode-label">
+                                    Promo Codes {{ 'Enabled' if config['codes'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-full mt-5" id="server-div">
+            <div class="p-5 bg-gray-900 rounded shadow-xl">
+                <div class="flex flex-row-reverse">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-save mr-1"></i>Save Server Config</button>
+                </div>
+                <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchServer(this, "server-creation", "Server Creation");' class="sr-only" {{ 'checked' if config['server']['creation'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="server-creation">
+                                    Server Creation {{ 'Enabled' if config['server']['creation'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchServer(this, "server-deletion", "Server Deletion");' class="sr-only" {{ 'checked' if config['server']['deletion'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="server-deletion">
+                                    Server Deletion {{ 'Enabled' if config['server']['deletion'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchServer(this, "server-editing", "Server Editing");' class="sr-only" {{ 'checked' if config['server']['update'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="server-editing">
+                                    Server Editing {{ 'Enabled' if config['server']['update'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-full mt-5" id="server-div">
+            <div class="p-5 bg-gray-900 rounded shadow-xl">
+                <div class="flex flex-row-reverse">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-save mr-1"></i>Save User Config</button>
+                </div>
+                <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                    <div class="flex flex-col items-center justify-start w-full mb-12">
+                        <div>
+                            <label class="flex mt-5 items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" onclick='handleSwitchUser(this, "user-creation", "User Creation");' class="sr-only" {{ 'checked' if config['user']['creation'] }}>
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-white font-medium" id="user-creation">
+                                    User Creation {{ 'Enabled' if config['user']['creation'] else 'Disabled' }}
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

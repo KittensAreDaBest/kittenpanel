@@ -32,13 +32,6 @@ in all copies or substantial portions of the Software.
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
         {% block head %}
         {% endblock %}
-        <script>
-            $(document).ready(function(){  
-                var navbar = $('a[href="' + window.location.href.split('#')[0] + '"]');
-                navbar.addClass("text-blue-300")
-                navbar.removeClass("text-gray-500")
-            });
-        </script>
     </head>
     <body class="bg-kittenpanel-dark-background font-sans leading-normal tracking-normal">
         <nav id="header" class="bg-kittenpanel-dark-secondary fixed w-full z-10 top-0 shadow">

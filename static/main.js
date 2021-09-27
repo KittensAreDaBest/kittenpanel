@@ -49,3 +49,8 @@ function checkParent(t, elm) {
   }
   return false;
 }
+$(document).ready(function(){  
+  var navbar = $('a[href="' + window.location.href.split('#')[0] + '"]');
+  navbar.addClass("text-blue-300")
+  navbar.removeClass("text-gray-500")
+});

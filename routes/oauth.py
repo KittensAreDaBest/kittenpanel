@@ -138,6 +138,8 @@ async def callback(request: Request, code: str):
             "email": rr["email"]
         }
         user = await db.users.find_one({"_id": rr["id"]})
+        if user['disabled']:
+            return JSONResponse({"code": 403, "error": "Account is disabled from logging in"}, status_code=403)
         async with request.app.session.get(pterodactyl + "api/application/users/" + str(user['pterodactyl']['id']), headers={"Authorization": "Bearer " + conf['pterodactyl']['key']}) as resp:
             pterodata = await resp.json()
         user = pterodata['attributes']

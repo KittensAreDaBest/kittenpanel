@@ -16,7 +16,7 @@ async def admin_dash_get(request: Request, user = Depends(get_admin_user)):
 @router.get('/users')
 async def admin_users_get(request: Request, user = Depends(get_admin_user)):
     ptero = f"{request.app.config['pterodactyl']['domain']}" if request.app.config['pterodactyl']['domain'].endswith('/') else f"{request.app.config['pterodactyl']['domain']}/"
-    return request.app.templates.TemplateResponse("admin/user.html", {"request": request, "user": user, "panel": ptero})
+    return request.app.templates.TemplateResponse("admin/user/view.html", {"request": request, "user": user, "panel": ptero})
 
 @router.get('/codes')
 async def admin_codes_get(request: Request, user = Depends(get_admin_user)):

@@ -42,12 +42,38 @@ async def admin_types_create_get(request: Request, user = Depends(get_admin_user
 @router.get('/locations')
 async def admin_locations_get(request: Request, user = Depends(get_admin_user)):
     ptero = f"{request.app.config['pterodactyl']['domain']}" if request.app.config['pterodactyl']['domain'].endswith('/') else f"{request.app.config['pterodactyl']['domain']}/"
-    return request.app.templates.TemplateResponse("admin/locations/view.html", {"request": request, "user": user, "panel": ptero})
+    db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
+    locations = await db.locations.find().to_list(None)
+    for location in locations:
+        types = ""
+        plans = ""
+        for type in location['types']:
+            print(type)
+            tl = await db.servertypes.find_one({'_id': type})
+            print(tl)
+            if tl:
+                types += f", {tl['name']}" if types != "" else tl['name']
+        for plan in location['plans']:
+            pl = await db.plans.find_one({'_id': plan})
+            if pl:
+                plans += f", {pl['name']}" if plans != "" else pl['name']
+        location['plans'] = plans
+        print(plans)
+        location['types'] = types
+    return request.app.templates.TemplateResponse("admin/locations/view.html", {"request": request, "user": user, "panel": ptero, "locations": locations})
 
 @router.get('/locations/create')
 async def admin_locations_create_get(request: Request, user = Depends(get_admin_user)):
     ptero = f"{request.app.config['pterodactyl']['domain']}" if request.app.config['pterodactyl']['domain'].endswith('/') else f"{request.app.config['pterodactyl']['domain']}/"
-    return request.app.templates.TemplateResponse("admin/locations/create.html", {"request": request, "user": user, "panel": ptero})
+    async with request.app.session.get(f"{ptero}api/application/locations", headers={"Authorization": f"Bearer {request.app.config['pterodactyl']['key']}"}) as response:
+        req = await response.json()
+        locations = req['data']
+    db = await request.app.database.get_db_client()
+    db = db[request.app.config['database']['database']]
+    plans = await db.plans.find().to_list(None)
+    types = await db.servertypes.find().to_list(None)
+    return request.app.templates.TemplateResponse("admin/locations/create.html", {"request": request, "user": user, "panel": ptero, "plans": plans, "types": types, "locations": locations})
 
 @router.get('/config')
 async def admin_config_get(request: Request, user = Depends(get_admin_user)):

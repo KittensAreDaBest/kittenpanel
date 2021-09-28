@@ -1,12 +1,69 @@
 {% extends "extends/admin.html"%}
 {% block head %}
 <script>
-function nospaces(t){
-  if(t.value.match(/\s/g)){
-    t.value=t.value.replace(/\s/g,'');
-  }
-}
+    function submit(){
+        const plans_selected = document.querySelectorAll('#plans option:checked');
+        var plans_values = Array.from(plans_selected).map(el => el.id);
+
+        const eggs_selected = document.querySelectorAll('#eggs option:checked');
+        var eggs_values = Array.from(eggs_selected).map(el => el.id);
+
+        const locations_selected = document.getElementById('location');
+        var options = locations_selected.options;
+        var id      = options[options.selectedIndex].id;
+
+        const name = document.getElementById('name').value;
+        if (eggs_selected.length == 0 || plans_selected.length == 0 || name == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'An validation error occurred',
+                text: 'Please fill out all the fields',
+            })
+        }
+        for (plan of plans_values) {
+            if (plan == 'all-plans') {
+                plans_values = [];
+                break;
+            }
+        }
+        for (egg of eggs_values) {
+            if (egg == 'all-eggs') {
+                eggs_values = [];
+                break;
+            }
+        }
+        $.ajax({
+            url: "{{ url_for('admin_api_location_create_post') }}",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                "name": name,
+                "pterodactyl": id,
+                "allowed_plans": plans_values,
+                "allowed_eggs": eggs_values,
+            }),
+            success: function(respdata) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Added Location'
+                })
+                setTimeout(function(){
+                    window.location.href = "{{ url_for('admin_locations_get') }}";
+                }, 2000);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'An error occurred',
+                    text: `Code: ${xhr.status} Message: ${xhr.responseText}`,
+                })
+            }     
+        });
+    }
+
 </script>
+
 {% endblock %}
 
 {% block main %}
@@ -19,12 +76,14 @@ function nospaces(t){
     <div class="p-5 bg-kittenpanel-dark-secondary rounded shadow-xl">
         <div class="mt-2">
             <label class="block text-sm text-white" >Location Display Name</label>
-            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="name" type="text" onkeyup="nospaces(this)">
+            <input class="w-full px-5 py-3 text-white bg-gray-700 rounded" id="name" type="text">
         </div>
         <div class="mt-2">
             <label class="block text-sm text-white" >Location</label>
-            <select class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-gray" id="userselect">
-                <option id="1">US, New York</option>
+            <select id="location" class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-gray" id="userselect">
+                {% for location in locations %}
+                    <option id="{{ location['attributes']['id'] }}">{{ location['attributes']['short'] }} {{ location['attributes']['long'] if location['attributes']['long'] }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="mt-2">
@@ -32,13 +91,12 @@ function nospaces(t){
             <select
                 class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-gray"
                 multiple
+                id="plans"
             >
-                <option>All Plans</option>
-                <option>Option 1</option>
-                <option>Option 2</option>
-                <option>Option 3</option>
-                <option>Option 4</option>
-                <option>Option 5</option>
+                <option id="all-plans">All Plans</option>
+                {% for plan in plans %}
+                <option id="{{ plan['_id'] }}">{{ plan['name'] }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="mt-2">
@@ -46,17 +104,16 @@ function nospaces(t){
             <select
                 class="w-full px-5 py-3 text-white border-gray-600 bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-gray"
                 multiple
+                id="eggs"
             >
-                <option>All Eggs</option>
-                <option>Option 1</option>
-                <option>Option 2</option>
-                <option>Option 3</option>
-                <option>Option 4</option>
-                <option>Option 5</option>
+                <option id="all-eggs">All Eggs</option>
+                {% for type in types %}
+                <option id="{{ type['_id'] }}">{{ type['name'] }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="mt-6">
-            <button onclick="createCode()" id="createServer" class="px-4 py-1 text-white bg-blue-600 hover:bg-blue-800 rounded" type="submit">Create Location</button>
+            <button onclick="submit()" id="createServer" class="px-4 py-1 text-white bg-blue-600 hover:bg-blue-800 rounded" type="submit">Create Location</button>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 import asyncio
 import json
+import uuid
 from motor.motor_asyncio import AsyncIOMotorClient
 async def main():
     with open("config.json", "rb") as file:
@@ -55,12 +56,10 @@ async def main():
                 },
             }
         })
-    plans = await db.plans.find_one({"_id": 1})
-    if plans is None:
-        await db.plans.insert_one({
-            "_id": 1,
+    await db.plans.insert_one({
+            "_id": str(uuid.uuid4()),
             "name": "Default Plan",
-            "default": False,
+            "default": True,
             "resources": {
                 "cpu": 100,
                 "ram": 1024,
@@ -71,19 +70,15 @@ async def main():
                 "database": 0
             }
         })
-    locations = await db.locations.find_one({"_id": 1})
-    if locations is None:
-        await db.locations.insert_one({
-            "_id": 1,
+    await db.locations.insert_one({
+            "_id": str(uuid.uuid4()),
             "name": "Default Location",
             "pterodactyl": 1,
-            "plans": [1],
-            "types": [1]
+            "plans": [],
+            "types": []
         })
-    types = await db.servertypes.find_one({"_id": 1})
-    if types is None:
-        await db.servertypes.insert_one({
-            "_id": 1,
+    await db.servertypes.insert_one({
+            "_id": str(uuid.uuid4()),
             "name": "PaperMC",
             "pterodactyl": {
                 "egg": 3,

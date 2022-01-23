@@ -13,3 +13,4 @@ KittenPanel is a client panel that allows users to split resoures throughout mut
 | Server Creation / Deletion / Editing      |❌         |
 | Admin Pages                               |❌         |
 | Light Theme                               |❌         |
+| Meow Meow                                 |✔️         |

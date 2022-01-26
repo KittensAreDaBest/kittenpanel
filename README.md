@@ -1,3 +1,5 @@
+# THIS PROJECT IS DEAD AND DOESNT WORK. DO NOT ASK FOR SUPPORT IN MY DISCORD SERVER
+
 # KittenPanel
 KittenPanel is a client panel that allows users to split resoures throughout mutiple servers on Pterodactyl, and uses Discord OAuth2 to authenticate its users.
 
